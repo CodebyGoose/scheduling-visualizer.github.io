@@ -36,6 +36,34 @@ function roundRobin(arrival, burst, quantum) {
   let idle = 0;
   let lastTime = 0;
   let arrived = Array(n).fill(false);
+  // Initial pass: give each process (in input order) one quantum sequentially
+  // (respecting arrival times). This reduces each process by up to one quantum
+  // before the usual Round Robin switching begins.
+  for (let i = 0; i < n; i++) {
+    // If the process hasn't arrived yet, advance time and record idle
+    if (arrival[i] > time) {
+      // record an idle segment until arrival
+      gantt.push({name: 'Idle', start: time, end: arrival[i]});
+      idle += arrival[i] - time;
+      time = arrival[i];
+    }
+    if (rem[i] > 0) {
+      let exec = Math.min(quantum, rem[i]);
+      gantt.push({name: getProcName(i), start: time, end: time + exec});
+      time += exec;
+      rem[i] -= exec;
+      arrived[i] = true; // mark as seen by the CPU
+      lastTime = time;
+      if (rem[i] === 0) {
+        finish[i] = time;
+        completed++;
+      }
+    }
+  }
+  // Seed ready queue with any arrived processes that still have remaining time
+  for (let i = 0; i < n; i++) {
+    if (arrived[i] && rem[i] > 0) ready.push(i);
+  }
   while (completed < n) {
     // Add newly arrived processes
     for (let i = 0; i < n; i++) {
