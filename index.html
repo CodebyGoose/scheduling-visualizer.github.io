@@ -4,52 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Scheduler UI — HTML/CSS Mockup</title>
-  <style>
-    /* ---------- Reset & base ---------- */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f3f7fb;color:#0f172a}
-
-    /* ---------- Page layout ---------- */
-    .wrap{max-width:1200px;margin:32px auto;padding:20px;display:grid;grid-template-columns:340px 1fr;gap:20px}
-
-    /* ---------- Card ---------- */
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.9), #ffffff);border-radius:14px;box-shadow:0 8px 30px rgba(16,24,40,0.06);padding:20px}
-    .card h3{font-size:18px;margin-bottom:12px}
-    label{display:block;font-size:13px;color:#6b7280;margin-top:12px}
-    input[type=text], input[type=number], select, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #e6eef6;background:#fbfdff;font-size:14px}
-    .small{font-size:13px;color:#6b7280}
-
-    /* ---------- Left column controls ---------- */
-    .controls{height:calc(100vh - 96px);display:flex;flex-direction:column}
-    .controls .spacer{flex:1}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#2563eb;color:#fff;border:none;cursor:pointer;font-weight:600}
-    .muted{color:#94a3b8;font-size:13px}
-
-    /* ---------- Right column output ---------- */
-    .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .util-pill{background:#ecfeff;color:#065f46;padding:8px 10px;border-radius:10px;font-weight:700}
-
-    /* gantt */
-    .gantt-wrap{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid #eef4fb}
-    .gantt{height:70px;border-radius:10px;background:linear-gradient(180deg,#f8fafc,#fff);display:flex;align-items:center;overflow:hidden;padding:8px;position:relative}
-    .seg{height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;margin-right:6px;color:#fff;font-weight:700;padding:0 8px;min-width:40px}
-    .seg.idle{background:#e6eef6;color:#334155;font-weight:600}
-    .legend{display:flex;gap:8px;align-items:center;margin-top:10px}
-    .legend .item{display:flex;gap:8px;align-items:center}
-    .legend .dot{width:14px;height:14px;border-radius:4px}
-
-    /* table */
-    table{width:100%;border-collapse:collapse;background:#ffffff;border-radius:8px;overflow:hidden}
-    th,td{padding:10px;border-bottom:1px solid #eef2f6;text-align:left;font-size:14px}
-    thead th{background:#fbfdff}
-
-    /* responsive */
-    @media (max-width:980px){
-      .wrap{grid-template-columns:1fr;max-width:860px}
-      .controls{height:auto}
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="wrap">
