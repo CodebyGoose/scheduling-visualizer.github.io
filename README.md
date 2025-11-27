@@ -1,5 +1,10 @@
 # CPU Scheduling Visualizer
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/github/explore/main/topics/html/html.png" alt="HTML" height="48" />
+  <img src="https://raw.githubusercontent.com/github/explore/main/topics/javascript/javascript.png" alt="JavaScript" height="48" />
+</p>
+
 This project is a web-based visualizer for CPU scheduling algorithms, specifically Round Robin and Shortest Remaining Time First (SRTF). It allows users to input process arrival and burst times, select an algorithm, and view the resulting Gantt chart, CPU utilization, and process statistics.
 
 ## Features
