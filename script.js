@@ -118,15 +118,31 @@ function srtf(arrival, burst) {
 function renderGantt(gantt) {
   const colors = ['#2563eb','#10b981','#f97316','#a78bfa','#eab308','#ef4444','#14b8a6','#6366f1'];
   let html = '';
-  gantt.forEach(seg => {
+  let timelineHtml = '';
+  let current = gantt.length > 0 ? gantt[0].start : 0;
+  gantt.forEach((seg, i) => {
     if (seg.name === 'Idle') {
       html += `<div class="seg idle">Idle</div>`;
     } else {
       let idx = Number(seg.name.replace('P',''))-1;
       html += `<div class="seg" style="background:${colors[idx%colors.length]}">${seg.name}</div>`;
     }
+    // Timeline numbers
+    timelineHtml += `<span style='margin-left:8px;font-size:12px;color:#64748b'>${seg.start}</span>`;
+    if (i === gantt.length-1) {
+      timelineHtml += `<span style='margin-left:8px;font-size:12px;color:#64748b'>${seg.end}</span>`;
+    }
   });
   document.getElementById('gantt').innerHTML = html;
+  // Add timeline below gantt
+  let timelineDiv = document.getElementById('ganttTimeline');
+  if (!timelineDiv) {
+    timelineDiv = document.createElement('div');
+    timelineDiv.id = 'ganttTimeline';
+    timelineDiv.style = 'display:flex;gap:0;justify-content:left;margin-top:2px;';
+    document.getElementById('gantt').parentNode.appendChild(timelineDiv);
+  }
+  timelineDiv.innerHTML = timelineHtml;
 }
 // Render table
 function renderTable(arrival, burst, finish, turnaround, waiting) {
