@@ -1,3 +1,14 @@
+// Auto-clear inputs and outputs on page load
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('arrival').value = '';
+  document.getElementById('burst').value = '';
+  document.getElementById('quantum').value = '';
+  document.getElementById('cpuUtil').innerText = 'CPU Utilization: —';
+  document.getElementById('gantt').innerHTML = '';
+  document.getElementById('resultTable').innerHTML = '';
+  document.querySelector('.legend').innerHTML = '';
+});
+
 // Hide quantum input for SRTF
 const algoSelect = document.getElementById('algo');
 const quantumInput = document.getElementById('quantum');
@@ -117,32 +128,39 @@ function srtf(arrival, burst) {
 // Render Gantt chart
 function renderGantt(gantt) {
   const colors = ['#2563eb','#10b981','#f97316','#a78bfa','#eab308','#ef4444','#14b8a6','#6366f1'];
-  let html = '';
-  let timelineHtml = '';
-  let current = gantt.length > 0 ? gantt[0].start : 0;
+  // Calculate segment widths
+  let totalUnits = gantt.length > 0 ? gantt[gantt.length-1].end - gantt[0].start : 0;
+  let pxPerUnit = 40;
+  let totalWidth = totalUnits * pxPerUnit;
+  let html = `<div style='display:flex;flex-direction:column;align-items:flex-start;width:${totalWidth}px'>`;
+  // Gantt bar row
+  html += `<div style='display:flex;border:1px solid #94a3b8;border-radius:6px;overflow:hidden;width:${totalWidth}px'>`;
   gantt.forEach((seg, i) => {
+    let width = (seg.end-seg.start)*pxPerUnit;
     if (seg.name === 'Idle') {
-      html += `<div class="seg idle">Idle</div>`;
+      html += `<div class=\"seg idle\" style=\"background:#e6eef6;color:#334155;border-right:1px solid #94a3b8;width:${width}px;min-width:0;padding:0 8px;\">Idle</div>`;
     } else {
       let idx = Number(seg.name.replace('P',''))-1;
-      html += `<div class="seg" style="background:${colors[idx%colors.length]}">${seg.name}</div>`;
-    }
-    // Timeline numbers
-    timelineHtml += `<span style='margin-left:8px;font-size:12px;color:#64748b'>${seg.start}</span>`;
-    if (i === gantt.length-1) {
-      timelineHtml += `<span style='margin-left:8px;font-size:12px;color:#64748b'>${seg.end}</span>`;
+      html += `<div class=\"seg\" style=\"background:${colors[idx%colors.length]};border-right:1px solid #94a3b8;width:${width}px;min-width:0;padding:0 8px;\">${seg.name}</div>`;
     }
   });
-  document.getElementById('gantt').innerHTML = html;
-  // Add timeline below gantt
-  let timelineDiv = document.getElementById('ganttTimeline');
-  if (!timelineDiv) {
-    timelineDiv = document.createElement('div');
-    timelineDiv.id = 'ganttTimeline';
-    timelineDiv.style = 'display:flex;gap:0;justify-content:left;margin-top:2px;';
-    document.getElementById('gantt').parentNode.appendChild(timelineDiv);
+  html += '</div>';
+  // Timeline numbers row: each number precisely below its segment edge, no gap
+  html += `<div style='display:flex;width:${totalWidth}px;margin-top:2px;position:relative;height:18px'>`;
+  let left = 0;
+  gantt.forEach((seg, i) => {
+    html += `<span style='position:absolute;left:${left}px;transform:translateX(-50%);text-align:center;font-size:13px;color:#334155;'>${seg.start}</span>`;
+    left += (seg.end-seg.start)*pxPerUnit;
+  });
+  // Last number at the right edge
+  if (gantt.length > 0) {
+    html += `<span style='position:absolute;left:${totalWidth}px;transform:translateX(-50%);text-align:center;font-size:13px;color:#334155;'>${gantt[gantt.length-1].end}</span>`;
   }
-  timelineDiv.innerHTML = timelineHtml;
+  html += '</div>';
+  html += '</div>';
+  document.getElementById('gantt').innerHTML = html;
+  // Wrap gantt in responsive container
+  document.getElementById('gantt').parentElement.classList.add('gantt-container');
 }
 // Render table
 function renderTable(arrival, burst, finish, turnaround, waiting) {
