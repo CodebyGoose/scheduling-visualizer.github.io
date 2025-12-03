@@ -193,9 +193,20 @@ function renderGantt(gantt) {
 // Render table
 function renderTable(arrival, burst, finish, turnaround, waiting) {
   let html = '';
+  let n = arrival.length;
+  let sumTurnaround = 0;
+  let sumWaiting = 0;
   for (let i = 0; i < arrival.length; i++) {
     html += `<tr><td>P${i+1}</td><td>${arrival[i]}</td><td>${burst[i]}</td><td>${finish[i]}</td><td>${turnaround[i]}</td><td>${waiting[i]}</td></tr>`;
+    sumTurnaround += turnaround[i];
+    sumWaiting += waiting[i];
   }
+  // Add average row in style similar to the provided image (Image 1)
+  html += `<tr>
+    <td colspan="4" style="font-weight:700;text-align:right">Average</td>
+    <td style="font-weight:700">${sumTurnaround} / ${n} = ${(sumTurnaround/n).toFixed(2)}</td>
+    <td style="font-weight:700">${sumWaiting} / ${n} = ${(sumWaiting/n).toFixed(2)}</td>
+  </tr>`;
   document.getElementById('resultTable').innerHTML = html;
 }
 // Render legend and timeline
